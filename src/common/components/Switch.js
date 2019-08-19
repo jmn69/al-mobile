@@ -2,13 +2,14 @@ import React, {Component, Fragment} from 'react';
 import {Scene, Router} from 'react-native-router-flux';
 import {Icon, Text} from 'native-base';
 import {View, StyleSheet} from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
+import {connect} from 'react-redux';
+import {Actions} from 'react-native-router-flux';
 
+import {authOperations} from 'src/redux/auth';
 import SideBar from './SideBar';
-
+import Launch from 'src/screens/Launch';
 import Home from 'src/screens/Home';
 import Login from 'src/screens/Login';
-import {Actions} from 'react-native-router-flux';
 
 const SCENES_TITLE = {
   home: 'Home',
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Switch extends Component {
+class Switch extends Component {
   renderTitle = () => {
     return (
       <View>
@@ -47,11 +48,11 @@ export default class Switch extends Component {
   render() {
     return (
       <Fragment>
-        <Spinner
+        {/* <Spinner
           visible={this.props.initialDataLoaded}
           textContent={'Loading initial data...'}
           textStyle={styles.whiteColor}
-        />
+        /> */}
         <Router>
           <Scene overlay>
             <Scene
@@ -62,11 +63,18 @@ export default class Switch extends Component {
               initial>
               <Scene key="modal" modal hideNavBar>
                 <Scene
-                  key="login"
-                  component={Login}
-                  title={SCENES_TITLE.login}
+                  key="Launch"
+                  component={Launch}
                   initial
+                  on={async () => {
+                    const isAuth = await this.props.authCheck();
+                    console.log(isAuth);
+                    return isAuth;
+                  }}
+                  success="drawer"
+                  failure="login"
                 />
+                <Scene key="login" component={Login} />
                 <Scene
                   key="drawer"
                   drawer
@@ -92,3 +100,14 @@ export default class Switch extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    authCheck: () => dispatch(authOperations.authCheck()),
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(Switch);

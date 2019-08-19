@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ViewPropTypes, View, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
+import {Input, Item} from 'native-base';
 
 import LinePinVisualizer from './LinePinVisualizer';
 
@@ -29,6 +30,7 @@ class HeaderFragment extends Component {
     dots: PropTypes.number,
     dotsLimit: PropTypes.number,
     enableDots: PropTypes.bool,
+    onUsernameChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -41,6 +43,7 @@ class HeaderFragment extends Component {
           backgroundColor: '#FFFFFF',
         },
       },
+      onUsernameChange: () => {},
     },
 
     reenterState: {
@@ -241,7 +244,7 @@ class HeaderFragment extends Component {
   }
 
   render() {
-    let {backgroundColor} = this.props;
+    let {backgroundColor, onUsernameChange} = this.props;
     let styleProps = this.props.style;
 
     let styles = [style.container, styleProps];
@@ -252,6 +255,16 @@ class HeaderFragment extends Component {
     return (
       <View style={styles}>
         {this._renderState()}
+        <Item style={style.inputContainer}>
+          <Input
+            placeholderTextColor="#FFFFFF"
+            placeholder="Saisir votre nom de compte"
+            selectionColor="black"
+            onChangeText={onUsernameChange}
+            autoCapitalize="none"
+            style={style.searchInput}
+          />
+        </Item>
         {this._renderPasscodeVisualizer()}
       </View>
     );
