@@ -8,6 +8,10 @@ const routes = [
     name: 'Home',
     route: 'home',
   },
+  {
+    name: 'Security',
+    route: 'security',
+  },
 ];
 
 export default class Sidebar extends Component {

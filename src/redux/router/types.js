@@ -1,0 +1,5 @@
+const SET_CURRENT_SCENE = 'SET_CURRENT_SCENE';
+
+export default {
+  SET_CURRENT_SCENE,
+};
